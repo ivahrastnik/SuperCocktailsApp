@@ -7,7 +7,7 @@
 import Foundation
 import Combine
 
-@MainActor
+@MainActor // what does MainActor do?
 class Navigator: ObservableObject {
     @Published var path: [Cocktail] = []
 }

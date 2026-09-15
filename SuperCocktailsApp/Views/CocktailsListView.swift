@@ -9,7 +9,7 @@ import SwiftUI
 import Combine
 import Foundation
 
-struct IconView: View {
+struct IconView: View { // move each view to its own file for better visibility
     var imageUrl: String
     var body: some View {
         AsyncImage(url: URL(string: imageUrl)) { phase in
@@ -64,10 +64,10 @@ struct ListCell: View {
     }
 }
 
-struct ListView: View {
+struct ListView: View { // does each of this View need to be a new struct? is there a better way to write it
     var cocktails: [Cocktail]?
     var body: some View {
-        List(cocktails ?? []) { cocktail in
+        List(cocktails ?? []) { cocktail in // what is the difference between List and VStack?
             NavigationLink(value: cocktail) {
                 ListCell(cocktail: cocktail)
             }
@@ -88,7 +88,7 @@ struct TitleView: View {
 }
 
 struct CocktailsListView: View {
-    @StateObject private var viewModel = SearchViewModel()
+    @StateObject private var viewModel = SearchViewModel() // what is the difference between StateObject and ObservedObject?
     @StateObject private var navigator = Navigator()
     var body: some View {
         NavigationStack(path: $navigator.path) {
@@ -96,7 +96,7 @@ struct CocktailsListView: View {
                 Rectangle()
                     .fill(Color.appBackground)
                     .ignoresSafeArea()
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 12) { // do we need to always define spacing in VStack or HStack?
                     TitleView()
                     SearchView(viewModel: viewModel)
                     ListView(cocktails: viewModel.cocktails)

@@ -23,7 +23,7 @@ enum CodingKeys: String, CodingKey {
     case dateModified
 }
 
-struct Ingredient: Hashable {
+struct Ingredient: Hashable { // for each model create a separate file for better readability and keep only models in models folder. also investigate difference between domain models and api models
     var name: String
     var measure: String?
 }
