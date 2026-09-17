@@ -7,9 +7,6 @@
 import Foundation
 import SwiftUI
 
-struct CocktailSearchResponse: Decodable {
-    let drinks: [Cocktail]?
-}
 
 protocol CocktailServicing {
     func fetchCocktails(searchText: String) async throws -> CocktailSearchResponse
@@ -17,7 +14,7 @@ protocol CocktailServicing {
 
 class CocktailService: CocktailServicing {
     func fetchCocktails(searchText: String) async throws -> CocktailSearchResponse {
-        guard let url = URL(string: "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=\(searchText)") else {
+        guard let url = URL(string: Constants.baseURL + Constants.searchPath + searchText) else {
             throw NetworkError.invalidURL
         }
         

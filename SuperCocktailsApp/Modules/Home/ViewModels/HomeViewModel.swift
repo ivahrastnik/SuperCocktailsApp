@@ -9,9 +9,17 @@ import Foundation
 import SwiftUI
 import Combine
 
-class SearchViewModel: ObservableObject {
+enum SearchState {
+    case idle
+    case loading
+    case loaded([Cocktail])
+    case empty(searchText: String)
+    case error(message: String)
+}
+
+class HomeViewModel: ObservableObject {
     @Published var searchText: String = ""
-    @Published var cocktails: [Cocktail] = []
+    @Published var state: SearchState = .idle
     
     private var cancellables = Set<AnyCancellable>()
     private var response = CocktailSearchResponse(drinks: [])
@@ -29,15 +37,20 @@ class SearchViewModel: ObservableObject {
     
     private func performSearch(_ text: String) {
         guard !text.isEmpty else {
-            print("text empty")
-            cocktails = []
+            state = .idle
             return
         }
-        print("searching: \(text)")
+        
+        state = .loading
+        
         Task {
-            response = try await apiClient.fetchCocktails(searchText: text)
-            cocktails = response.drinks ?? []
-            print(cocktails)
+            do {
+                response = try await apiClient.fetchCocktails(searchText: text)
+                let cocktails = response.drinks ?? []
+                state = cocktails.isEmpty ? .empty(searchText: text) : .loaded(cocktails)
+            } catch {
+                state = .error(message: Constants.errorMessage)
+            }
         }
     }
 }
