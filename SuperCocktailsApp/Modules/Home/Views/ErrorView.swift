@@ -13,7 +13,7 @@ struct ErrorView: View {
             Image(systemName: "exclamationmark.triangle")
                 .imageScale(.large)
                 .foregroundStyle(.teal)
-            Text("Something went wrong!")
+            Text(Constants.errorLabel)
                 .font(.headline)
             Text(message)
         }

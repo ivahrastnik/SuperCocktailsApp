@@ -6,32 +6,38 @@
 //
 import Foundation
 import SwiftUI
+import Combine
 
 
 protocol CocktailServicing {
-    func fetchCocktails(searchText: String) async throws -> CocktailSearchResponse
+    func fetchCocktails(searchText: String) -> AnyPublisher<CocktailSearchResponse, NetworkError>
 }
 
 class CocktailService: CocktailServicing {
-    func fetchCocktails(searchText: String) async throws -> CocktailSearchResponse {
+    func fetchCocktails(searchText: String) -> AnyPublisher<CocktailSearchResponse, NetworkError> {
         guard let url = URL(string: Constants.baseURL + Constants.searchPath + searchText) else {
-            throw NetworkError.invalidURL
+            return Fail(outputType: CocktailSearchResponse.self, failure: NetworkError.invalidURL)
+                .eraseToAnyPublisher()
         }
         
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw NetworkError.invalidResponse
-        }
-        
-        guard httpResponse.statusCode == 200 else {
-            throw NetworkError.invalidStatusCode(httpResponse.statusCode)
-        }
-        
-        do {
-            return try JSONDecoder().decode(CocktailSearchResponse.self, from: data)
-        } catch {
-            throw NetworkError.decodingFailed
-        }
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .tryMap { data, response -> Data in
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    throw NetworkError.invalidResponse
+                }
+                guard httpResponse.statusCode == 200 else {
+                    throw NetworkError.invalidStatusCode(httpResponse.statusCode)
+                }
+                return data
+            }
+            .decode(type: CocktailSearchResponse.self, decoder: JSONDecoder())
+            .mapError { error -> NetworkError in
+                if let networkError = error as? NetworkError {
+                    return networkError
+                } else {
+                    return NetworkError.decodingFailed
+                }
+            }
+            .eraseToAnyPublisher()
     }
 }

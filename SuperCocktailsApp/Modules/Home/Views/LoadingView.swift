@@ -12,7 +12,7 @@ struct LoadingView: View {
             ProgressView()
                 .tint(Color.textAccent)
                 .scaleEffect(1.5)
-            Text("Loading cocktails...")
+            Text(Constants.loadingMessage)
                 .foregroundStyle(Color.textAccent)
         }
     }

@@ -23,12 +23,12 @@ struct CocktailCardView: View {
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 12) {
-                        CategoryTitleView(text: "Ingredients")
+                        CategoryTitleView(text: Constants.ingredientsLabel)
                         IngredientsListView(ingredients: cocktail.ingredients)
-                        CategoryTitleView(text: "Instructions")
+                        CategoryTitleView(text: Constants.instructionsLabel)
                         Text(cocktail.instructions)
                             .foregroundStyle(Color.textLowAccent)
-                        Text("Updated: \(cocktail.dateModified ?? "Unknown")")
+                        Text(Constants.dateFormatted(date: cocktail.dateModified))
                             .foregroundStyle(Color.textAccent)
                             .font(.caption2)
                     }

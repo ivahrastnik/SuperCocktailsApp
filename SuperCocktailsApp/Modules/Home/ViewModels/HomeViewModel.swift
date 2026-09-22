@@ -22,35 +22,34 @@ class HomeViewModel: ObservableObject {
     @Published var state: SearchState = .idle
     
     private var cancellables = Set<AnyCancellable>()
-    private var response = CocktailSearchResponse(drinks: [])
     private let apiClient = CocktailService()
     
     init() {
         $searchText
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .removeDuplicates()
-            .sink { [weak self] text in
-                self?.performSearch(text)
+            .map { [apiClient] text -> AnyPublisher<SearchState, Never> in
+                guard !text.isEmpty else {
+                    return Just(SearchState.idle).eraseToAnyPublisher()
+                }
+                return apiClient.fetchCocktails(searchText: text)
+                    .map { response -> SearchState in
+                        let cocktails = response.drinks ?? []
+                        return cocktails.isEmpty ? .empty(searchText: text) : .loaded(cocktails)
+                        
+                    }
+                    .catch { error -> AnyPublisher<SearchState, Never> in
+                        return Just(SearchState.error(message: Constants.errorMessage))
+                            .eraseToAnyPublisher()
+                    }
+                    .prepend(SearchState.loading)
+                    .eraseToAnyPublisher()
+            }
+            .switchToLatest()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] newState in
+                self?.state = newState
             }
             .store(in: &cancellables)
-    }
-    
-    private func performSearch(_ text: String) {
-        guard !text.isEmpty else {
-            state = .idle
-            return
-        }
-        
-        state = .loading
-        
-        Task {
-            do {
-                response = try await apiClient.fetchCocktails(searchText: text)
-                let cocktails = response.drinks ?? []
-                state = cocktails.isEmpty ? .empty(searchText: text) : .loaded(cocktails)
-            } catch {
-                state = .error(message: Constants.errorMessage)
-            }
-        }
     }
 }

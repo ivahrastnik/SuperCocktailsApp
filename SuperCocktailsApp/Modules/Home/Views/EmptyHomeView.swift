@@ -13,9 +13,9 @@ struct EmptyHomeView: View {
             Image(systemName: "magnifyingglass")
                 .imageScale(.large)
                 .foregroundStyle(.teal)
-            Text("No results")
+            Text(Constants.emptyTitle)
                 .font(.headline)
-            Text("Try again")
+            Text(Constants.emptyLabel(text: searchText))
         }
         .foregroundStyle(Color.textAccent)
     }

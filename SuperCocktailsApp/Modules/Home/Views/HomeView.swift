@@ -20,7 +20,7 @@ struct HomeView: View {
                     .ignoresSafeArea()
                 VStack(alignment: .center, spacing: 12) {
                     VStack(alignment: .leading, spacing: 12) {
-                        TitleView(text: "Cocktails")
+                        TitleView(text: Constants.homeTitle)
                         SearchView(viewModel: viewModel)
                     }
                     
@@ -42,7 +42,7 @@ struct HomeView: View {
                 .padding(12)
                 .foregroundStyle(Color.appBackground)
                 .navigationDestination(for: Cocktail.self) { cocktail in
-                    DetailView(cocktail: cocktail)
+                    DetailView(viewModel: DetailViewModel(cocktail: cocktail))
                 }
             }
         }

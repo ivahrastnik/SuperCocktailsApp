@@ -9,7 +9,7 @@ import SwiftUI
 struct InitialView: View {
     var body: some View {
         VStack {
-            Text("Try searching for your favorite drink!")
+            Text(Constants.idleMessage)
                 .foregroundStyle(Color.textAccent)
         }
     }
