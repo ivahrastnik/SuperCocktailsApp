@@ -9,6 +9,7 @@ import SwiftUI
 
 extension Color {
     static let appBackground = Color.black.mix(with: .teal, by: 0.4)
-    static let cellBackground = Color.black.mix(with: .teal, by: 0.2)
+    static let cellBackground = Color.black.mix(with: .teal, by: 0.3)
     static let textAccent = Color.white.mix(with: .yellow, by: 0.3)
+    static let textLowAccent = Color.white.mix(with: .yellow, by: 0.4)
 }
