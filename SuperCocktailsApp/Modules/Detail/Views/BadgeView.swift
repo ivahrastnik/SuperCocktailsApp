@@ -4,7 +4,7 @@
 //
 //  Created by Iva Hrastnik on 10.09.2026..
 //
- import SwiftUI
+import SwiftUI
 
 struct BadgeView: View {
     let text: String

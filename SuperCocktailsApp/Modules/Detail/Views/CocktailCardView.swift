@@ -19,23 +19,42 @@ struct CocktailCardView: View {
                     BadgeView(text: cocktail.alcoholic, badgeColor: .red)
                 }
                 .foregroundStyle(Color.textAccent)
-                TitleView(text: cocktail.name)
-                
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 12) {
-                        CategoryTitleView(text: Constants.ingredientsLabel)
-                        IngredientsListView(ingredients: cocktail.ingredients)
-                        CategoryTitleView(text: Constants.instructionsLabel)
-                        Text(cocktail.instructions)
-                            .foregroundStyle(Color.textLowAccent)
-                        Text(Constants.dateFormatted(date: cocktail.dateModified))
-                            .foregroundStyle(Color.textAccent)
-                            .font(.caption2)
-                    }
-                }
+                titleView(text: cocktail.name)
+                scrollView
             }
             .padding(20)
         }
         .ignoresSafeArea()
+    }
+    
+    func titleView(text: String) -> some View {
+        return Text(text)
+            .foregroundStyle(Color.textAccent)
+            .font(.title)
+            .fontDesign(.monospaced)
+        
+    }
+    
+    var scrollView: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                categoryTitleView(text: Constants.ingredientsLabel)
+                IngredientsListView(ingredients: cocktail.ingredients)
+                categoryTitleView(text: Constants.instructionsLabel)
+                Text(cocktail.instructions)
+                    .foregroundStyle(Color.textLowAccent)
+                Text(Constants.dateFormatted(date: cocktail.dateModified))
+                    .foregroundStyle(Color.textAccent)
+                    .font(.caption2)
+            }
+        }
+    }
+    
+    func categoryTitleView(text: String) -> some View {
+        return Text(text.uppercased())
+            .foregroundStyle(Color.textAccent)
+            .font(.caption)
+            .fontDesign(.monospaced)
+        
     }
 }

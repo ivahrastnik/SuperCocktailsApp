@@ -25,6 +25,10 @@ class HomeViewModel: ObservableObject {
     private let apiClient = CocktailService()
     
     init() {
+        bindSearch()
+    }
+    
+    private func bindSearch() {
         $searchText
             .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
             .removeDuplicates()

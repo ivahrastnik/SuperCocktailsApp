@@ -36,7 +36,7 @@ struct HomeView: View {
                     case .error(let message):
                         ErrorView(message: message)
                     }
-
+                    
                     Spacer()
                 }
                 .padding(12)
@@ -46,6 +46,14 @@ struct HomeView: View {
                 }
             }
         }
+    }
+    
+    func TitleView(text: String) -> some View {
+        return Text(text)
+            .foregroundStyle(Color.textAccent)
+            .font(.title)
+            .fontDesign(.monospaced)
+        
     }
 }
 
