@@ -10,7 +10,7 @@ import Combine
 import Foundation
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    @StateObject private var viewModel = HomeViewModel(apiClient: CocktailService())
     @StateObject private var navigator = Navigator()
     var body: some View {
         NavigationStack(path: $navigator.path) {
@@ -20,7 +20,7 @@ struct HomeView: View {
                     .ignoresSafeArea()
                 VStack(alignment: .center, spacing: 12) {
                     VStack(alignment: .leading, spacing: 12) {
-                        TitleView(text: Constants.homeTitle)
+                        titleView
                         SearchView(viewModel: viewModel)
                     }
                     
@@ -48,12 +48,11 @@ struct HomeView: View {
         }
     }
     
-    func TitleView(text: String) -> some View {
-        return Text(text)
+    var titleView: some View {
+        return Text(Constants.homeTitle)
             .foregroundStyle(Color.textAccent)
             .font(.title)
             .fontDesign(.monospaced)
-        
     }
 }
 

@@ -19,7 +19,7 @@ struct CocktailCardView: View {
                     BadgeView(text: cocktail.alcoholic, badgeColor: .red)
                 }
                 .foregroundStyle(Color.textAccent)
-                titleView(text: cocktail.name)
+                titleView
                 scrollView
             }
             .padding(20)
@@ -27,8 +27,8 @@ struct CocktailCardView: View {
         .ignoresSafeArea()
     }
     
-    func titleView(text: String) -> some View {
-        return Text(text)
+    var titleView: some View {
+        return Text(cocktail.name)
             .foregroundStyle(Color.textAccent)
             .font(.title)
             .fontDesign(.monospaced)

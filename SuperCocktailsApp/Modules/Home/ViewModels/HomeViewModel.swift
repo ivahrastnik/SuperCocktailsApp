@@ -22,9 +22,10 @@ class HomeViewModel: ObservableObject {
     @Published var state: SearchState = .idle
     
     private var cancellables = Set<AnyCancellable>()
-    private let apiClient = CocktailService()
+    private let apiClient: CocktailServicing
     
-    init() {
+    init(apiClient: CocktailServicing) {
+        self.apiClient = apiClient
         bindSearch()
     }
     
