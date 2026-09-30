@@ -7,7 +7,7 @@
 import SwiftUI
 
 struct SearchView: View {
-    @ObservedObject var viewModel: SearchViewModel
+    @ObservedObject var viewModel: HomeViewModel
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 12)

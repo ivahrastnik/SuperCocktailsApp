@@ -18,7 +18,7 @@ struct SuperCocktailsAppApp: App {
                         .transition(.opacity)
                     
                 } else {
-                    CocktailsListView()
+                    HomeView()
                         .transition(.opacity)
                 }
             }
