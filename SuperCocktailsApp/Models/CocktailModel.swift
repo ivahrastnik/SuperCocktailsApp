@@ -5,6 +5,8 @@
 //  Created by Iva Hrastnik on 09.09.2026..
 //
 
+import Foundation
+
 struct DynamicKey: CodingKey {
     var stringValue: String
     init(stringValue: String) { self.stringValue = stringValue }
@@ -23,11 +25,6 @@ enum CodingKeys: String, CodingKey {
     case dateModified
 }
 
-struct Ingredient: Hashable {
-    var name: String
-    var measure: String?
-}
-
 struct Cocktail: Decodable, Identifiable, Hashable {
     let id: String
     let name: String
@@ -37,7 +34,7 @@ struct Cocktail: Decodable, Identifiable, Hashable {
     let instructions: String
     let imageUrl: String?
     let dateModified: String?
-    var ingredients: [Ingredient]
+    var ingredients: [IngredientModel]
     
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -59,9 +56,8 @@ struct Cocktail: Decodable, Identifiable, Hashable {
             let measureKey = DynamicKey.init(stringValue: "strMeasure\(i)")
             let measure = try dynamicContainer.decodeIfPresent(String.self, forKey: measureKey)
             
-            let ingredient = Ingredient(name: name, measure: measure)
+            let ingredient = IngredientModel(name: name, measure: measure)
             self.ingredients.append(ingredient)
-            print(ingredient.name)
         }
     }
 }
