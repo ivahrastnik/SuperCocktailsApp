@@ -10,8 +10,18 @@ import Foundation
 enum Constants {
     static let baseURL = "https://www.thecocktaildb.com/api/json/v1/1/"
     static let searchPath = "search.php?s="
+    static let allCategoriesPath = "list.php?c=list"
+    static func categoryListPath(category: String) -> String {
+        return "filter.php?c=\(category)"
+    }
+    static let idPath = "lookup.php?i="
     static let errorMessage = "Could not load cocktails. Check your connection and try again."
+    static let errorDetailsMessage = "Could not load drink details. Check your connection and try again."
+    static let errorReloadButtonLabel = "Reload"
+    static let errorImageSource = "exclamationmark.triangle"
+    static let imagePlaceholderSource = "photo"
     static let loadingMessage = "Loading cocktails..."
+    static let loadingDetailsMessage = "Loading drink details..."
     static let idleMessage = "Try searching for your favorite drink!"
     static let homeTitle = "Cocktails"
     static let errorLabel = "Something went wrong!"

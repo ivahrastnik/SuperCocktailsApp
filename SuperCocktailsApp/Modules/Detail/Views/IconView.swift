@@ -18,7 +18,7 @@ struct IconView: View {
             case .empty:
                 ProgressView()
             case .failure:
-                Image(systemName: "photo")
+                Image(systemName: Constants.imagePlaceholderSource)
             @unknown default:
                 EmptyView()
             }

@@ -8,6 +8,7 @@ import SwiftUI
 
 struct ListCellView: View {
     let cocktail: Cocktail
+    let categoryName: String?
     var body: some View {
         HStack(spacing: 12) {
             IconView(imageUrl: cocktail.imageUrl ?? "")
@@ -16,8 +17,7 @@ struct ListCellView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(cocktail.name)
                     .font(.headline)
-                Text(cocktail.category)
-                BadgeView(text: cocktail.alcoholic, badgeColor: .red)
+                Text((cocktail.category ?? categoryName) ?? "")
             }
             .foregroundStyle(Color.textAccent)
             .scaleEffect(0.8)

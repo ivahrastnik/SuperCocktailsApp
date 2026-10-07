@@ -10,8 +10,9 @@ import Combine
 import Foundation
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel(apiClient: CocktailService())
+    @StateObject private var viewModel = HomeViewModel()
     @StateObject private var navigator = Navigator()
+    
     var body: some View {
         NavigationStack(path: $navigator.path) {
             ZStack {
@@ -22,6 +23,7 @@ struct HomeView: View {
                     VStack(alignment: .leading, spacing: 12) {
                         titleView
                         SearchView(viewModel: viewModel)
+                        categoriesView
                     }
                     
                     switch viewModel.state {
@@ -30,7 +32,7 @@ struct HomeView: View {
                     case .loading:
                         LoadingView()
                     case .loaded(let cocktails):
-                        ListView(cocktails: cocktails)
+                        ListView(cocktails: cocktails, categoryName: viewModel.categoryPicked?.name)
                     case .empty(let searchText):
                         EmptyHomeView(searchText: searchText)
                     case .error(let message):
@@ -42,7 +44,7 @@ struct HomeView: View {
                 .padding(12)
                 .foregroundStyle(Color.appBackground)
                 .navigationDestination(for: Cocktail.self) { cocktail in
-                    DetailView(viewModel: DetailViewModel(cocktail: cocktail))
+                    DetailView(viewModel: DetailViewModel(drink: cocktail))
                 }
             }
         }
@@ -53,6 +55,20 @@ struct HomeView: View {
             .foregroundStyle(Color.textAccent)
             .font(.title)
             .fontDesign(.monospaced)
+    }
+    
+    var categoriesView: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack {
+                ForEach(viewModel.categories) { category in
+                    Button {
+                        $viewModel.categoryPicked.wrappedValue = category
+                    } label: {
+                        BadgeView(text: category.name, badgeColor: $viewModel.categoryPicked.wrappedValue == category ? .red : .textAccent)
+                    }
+                }
+            }
+        }
     }
 }
 

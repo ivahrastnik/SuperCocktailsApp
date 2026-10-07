@@ -25,7 +25,7 @@ enum CodingKeys: String, CodingKey {
     case dateModified
 }
 
-struct Cocktail: Decodable, Identifiable, Hashable {
+struct ApiCocktail: Decodable, Identifiable, Hashable {
     let id: String
     let name: String
     let category: String
