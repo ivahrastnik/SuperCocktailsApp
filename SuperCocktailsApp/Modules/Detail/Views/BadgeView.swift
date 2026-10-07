@@ -16,12 +16,12 @@ struct BadgeView: View {
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(badgeColor)
-                    .opacity(0.6)
+                    .opacity(0.7)
                 
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color.textLowAccent, lineWidth: 0.5)
+                    .stroke(badgeColor, lineWidth: 0.8)
             )
     }
 }

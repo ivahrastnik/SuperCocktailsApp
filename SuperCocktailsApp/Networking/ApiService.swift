@@ -8,15 +8,18 @@ import Foundation
 import SwiftUI
 import Combine
 
-
 protocol CocktailServicing {
-    func fetchCocktails(searchText: String) -> AnyPublisher<CocktailSearchResponse, NetworkError>
+    func fetchDrinksBySearchText(searchText: String) -> AnyPublisher<CocktailResponse, NetworkError>
+    func fetchCategories() -> AnyPublisher<CategoryListResponse, NetworkError>
+    func fetchDrinksByCategorySelected(category: Category) -> AnyPublisher<CocktailResponse, NetworkError>
+    func fetchDrinkDetails(id: String) -> AnyPublisher<DrinkDetailsResponse, NetworkError>
 }
 
 class CocktailService: CocktailServicing {
-    func fetchCocktails(searchText: String) -> AnyPublisher<CocktailSearchResponse, NetworkError> {
-        guard let url = URL(string: Constants.baseURL + Constants.searchPath + searchText) else {
-            return Fail(outputType: CocktailSearchResponse.self, failure: NetworkError.invalidURL)
+    
+    private func fetchDataFromURL<T: Decodable>(urlString: String) -> AnyPublisher<T, NetworkError> {
+        guard let url = URL(string: urlString) else {
+            return Fail(outputType: T.self, failure: NetworkError.invalidURL)
                 .eraseToAnyPublisher()
         }
         
@@ -30,7 +33,7 @@ class CocktailService: CocktailServicing {
                 }
                 return data
             }
-            .decode(type: CocktailSearchResponse.self, decoder: JSONDecoder())
+            .decode(type: T.self, decoder: JSONDecoder())
             .mapError { error -> NetworkError in
                 if let networkError = error as? NetworkError {
                     return networkError
@@ -39,5 +42,21 @@ class CocktailService: CocktailServicing {
                 }
             }
             .eraseToAnyPublisher()
+    }
+    
+    func fetchDrinksBySearchText(searchText: String) -> AnyPublisher<CocktailResponse, NetworkError> {
+        return fetchDataFromURL(urlString: Constants.baseURL + Constants.searchPath + searchText)
+    }
+    
+    func fetchCategories() -> AnyPublisher<CategoryListResponse, NetworkError> {
+        return fetchDataFromURL(urlString: Constants.baseURL + Constants.allCategoriesPath)
+    }
+    
+    func fetchDrinksByCategorySelected(category: Category) -> AnyPublisher<CocktailResponse, NetworkError> {
+        return fetchDataFromURL(urlString: Constants.baseURL + Constants.categoryListPath(category: category.name))
+    }
+    
+    func fetchDrinkDetails(id: String) -> AnyPublisher<DrinkDetailsResponse, NetworkError> {
+        return fetchDataFromURL(urlString: Constants.baseURL + Constants.idPath + id)
     }
 }

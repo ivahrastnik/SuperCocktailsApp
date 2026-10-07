@@ -8,10 +8,11 @@ import SwiftUI
 
 struct ListView: View {
     let cocktails: [Cocktail]?
+    let categoryName: String?
     var body: some View {
         List(cocktails ?? []) { cocktail in
             NavigationLink(value: cocktail) {
-                ListCellView(cocktail: cocktail)
+                ListCellView(cocktail: cocktail, categoryName: categoryName)
                     .padding(.vertical, -12)
             }
             .listRowBackground(Color.appBackground)

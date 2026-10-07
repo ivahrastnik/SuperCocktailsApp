@@ -10,7 +10,7 @@ struct ErrorView: View {
     let message: String
     var body: some View {
         VStack {
-            Image(systemName: "exclamationmark.triangle")
+            Image(systemName: Constants.errorImageSource)
                 .imageScale(.large)
                 .foregroundStyle(.teal)
             Text(Constants.errorLabel)
